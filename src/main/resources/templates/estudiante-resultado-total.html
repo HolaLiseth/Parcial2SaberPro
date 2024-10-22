@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Resultado Total</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+	<link rel="icon" href="../img/iconoweb.png" type="image/x-icon"> <!-- Icono favicon -->
+	<style>
+		body {
+			height: 100vh;
+			background-image: url(../img/fonlist.png);
+			background-repeat: no-repeat;
+			background-size: cover;
+		}
+
+		.page-title {
+			text-align: center;
+			margin-top: 20px;
+			margin-bottom: 20px;
+		}
+
+		.top {
+			background-color: rgb(64, 128, 128);
+			padding: 20px;
+			border-top-left-radius: 15px;
+			border-top-right-radius: 15px;
+			text-align: center;
+		}
+
+		.bottom {
+			background-color: rgb(0, 128, 128);
+			padding: 10px;
+			display: flex;
+			align-items: center;
+			justify-content: space-evenly;
+			border-bottom-left-radius: 15px;
+			border-bottom-right-radius: 15px;
+		}
+
+		.divider {
+			width: 1px;
+			height: 30px;
+			background-color: #ffffff;
+			align-items: center;
+		}
+
+		.info {
+			text-align: center;
+			background-color: #ffffff;
+			padding: 5px;
+			border-radius: 5px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			flex-direction: column;
+		}
+
+		.level {
+			font-weight: bold;
+		}
+
+		.title-center {
+			text-align: center;
+		}
+
+		.nivel-color-1 {
+			background-color: #f87d7d;
+		}
+
+		.nivel-color-2 {
+			background-color: #99ccff;
+		}
+
+		.nivel-color-3 {
+			background-color: #ffff99;
+		}
+
+		.nivel-color-4 {
+			background-color: #99ff99;
+		}
+
+		.centered-container {
+			margin-left: 525px;
+			margin-right: 0 !important;
+		}
+
+		.row {
+			margin-right: 0 !important;
+			margin-left: 0 !important;
+			margin-top: 15%;
+		}
+
+		.navbar-title {
+			position: absolute;
+			left: 50%;
+			transform: translateX(-50%);
+		}
+		.centered-container {
+		    margin-left: 10px; /* Ajusta este valor según sea necesario */
+		}
+	</style>
+</head>
+
+<body>
+	<nav class="navbar navbar-expand-lg navbar-light bg-light-green">
+		<a class="navbar-brand" th:href="@{/estudiante/index}">
+			<!--<img src="../img/saberprologo.png" width="200" height="80" class="d-inline-block align-top" alt="Logo">-->
+		</a>
+		<div class="navbar-title">
+			<h4>     </h4>
+				<h1> PUNTAJE TOTAL DE LA PRUEBA TyT</h1>
+		</div>
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+			aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+		<div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+			<ul class="navbar-nav">
+				<li class="nav-item">
+					<a class="btn btn-outline-success my-2 my-sm-0" type="submit" th:href="@{/estudiante/index}">Regresar</a>
+				</li>
+			</ul>
+		</div>
+	</nav>
+	<div class="container-fluid">
+	    <br>
+	    <div class="centered-container">
+	        <div class="row d-flex justify-content-center">
+	            <!-- Primera tabla: TOTAL -->
+	            <div class="col-md-5 mx-2"> <!-- Margen horizontal para espacio -->
+	                <div class="container">
+	                    <div class="top">
+	                        <h2 class="title-center">TOTAL</h2>
+	                    </div>
+	                    <div class="bottom">
+	                        <div class="info nivel-color-1">
+	                            <h3 th:text="${totalLevel}" class="level"></h3>
+	                        </div>
+	                        <div class="divider"></div>
+	                        <div class="info">
+	                            <h3>Puntaje</h3>
+	                            <p id="puntaje" th:text="${total}"></p> <!-- Cambié este ID para usarlo en el script -->
+	                        </div>
+	                    </div>
+	                </div>
+	            </div>
+	
+	            <!-- Segunda tabla: RESULTADO -->
+	            <div class="col-md-5 mx-2"> <!-- Margen horizontal para espacio -->
+	                <div class="container">
+	                    <div class="top">
+	                        <h2 class="title-center">RESULTADO</h2>
+	                    </div>
+	                    <div class="bottom">
+	                        <div class="info">
+	                            <h3>Estado</h3>
+	                            <p id="resultado"></p> <!-- Aquí se mostrará el resultado (Aprobado, Reprobado, Anulado) -->
+	                        </div>
+	                    </div>
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+	</div>
+
+	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+	<script>
+		// Lógica para agregar clases de colores según el nivel
+		var niveles = document.querySelectorAll(".level");
+		niveles.forEach(function (nivel) {
+			var textoNivel = nivel.textContent.trim();
+			var infoDiv = nivel.parentElement.parentElement;
+			switch (textoNivel) {
+				case "Nivel 1":
+					infoDiv.querySelector(".info").classList.add("nivel-color-1");
+					break;
+				case "Nivel 2":
+					infoDiv.querySelector(".info").classList.add("nivel-color-2");
+					break;
+				case "Nivel 3":
+					infoDiv.querySelector(".info").classList.add("nivel-color-3");
+					break;
+				case "Nivel 4":
+					infoDiv.querySelector(".info").classList.add("nivel-color-4");
+					break;
+				default:
+					break;
+			}
+		});
+
+		// Lógica para mostrar "Aprobado", "Reprobado" o "Anulado"
+		window.addEventListener('DOMContentLoaded', function () {
+			var puntajeElement = document.getElementById('puntaje');
+			var puntaje = parseInt(puntajeElement.textContent.trim(), 10);
+			var resultadoTexto = '';
+
+			if (puntaje === 0) {
+				resultadoTexto = 'Anulado';
+			} else if (puntaje > 125) {
+				resultadoTexto = 'Aprobado';
+			} else {
+				resultadoTexto = 'Reprobado';
+			}
+
+			document.getElementById('resultado').textContent = resultadoTexto;
+		});
+	</script>
+
+</body>
+</html>
